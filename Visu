@@ -1,0 +1,250 @@
+-- [[ Osama Overpowered Optimized Auto Farm & Steal Hub ]] --
+
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local Corner = Instance.new("UICorner")
+local FrameCorner = Instance.new("UICorner")
+
+local StealButton = Instance.new("TextButton")
+local StealCorner = Instance.new("UICorner")
+
+local HarvestButton = Instance.new("TextButton")
+local HarvestCorner = Instance.new("UICorner")
+
+local CustomScriptButton = Instance.new("TextButton")
+local CustomScriptCorner = Instance.new("UICorner")
+
+ScreenGui.Name = "OsamaOptimizedHub"
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ResetOnSpawn = false
+
+-- Elegant Dark Purple UI Design (Adjusted size for three buttons)
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(25, 15, 35) 
+MainFrame.Position = UDim2.new(0.05, 0, 0.3, 0) 
+MainFrame.Size = UDim2.new(0, 260, 0, 210) -- Expanded height to fit all buttons
+MainFrame.Active = true
+MainFrame.Draggable = true 
+
+FrameCorner.CornerRadius = UDim.new(0, 12)
+FrameCorner.Parent = MainFrame
+
+-- 1. Auto Steal Button Configuration
+StealButton.Name = "StealButton"
+StealButton.Parent = MainFrame
+StealButton.BackgroundColor3 = Color3.fromRGB(138, 43, 226) 
+StealButton.Position = UDim2.new(0.076, 0, 0.08, 0)
+StealButton.Size = UDim2.new(0, 220, 0, 45)
+StealButton.Font = Enum.Font.SourceSansBold
+StealButton.Text = "Step 1: Save Home Location 🏠"
+StealButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+StealButton.TextSize = 13
+
+StealCorner.CornerRadius = UDim.new(0, 8)
+StealCorner.Parent = StealButton
+
+-- 2. Remote Harvest Button Configuration
+HarvestButton.Name = "HarvestButton"
+HarvestButton.Parent = MainFrame
+HarvestButton.BackgroundColor3 = Color3.fromRGB(138, 43, 226) 
+HarvestButton.Position = UDim2.new(0.076, 0, 0.38, 0)
+HarvestButton.Size = UDim2.new(0, 220, 0, 45)
+HarvestButton.Font = Enum.Font.SourceSansBold
+HarvestButton.Text = "Remote Harvest: OFF 🌾"
+HarvestButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+HarvestButton.TextSize = 13
+
+HarvestCorner.CornerRadius = UDim.new(0, 8)
+HarvestCorner.Parent = HarvestButton
+
+-- 3. Integrated XHubMax Script Button Configuration
+CustomScriptButton.Name = "CustomScriptButton"
+CustomScriptButton.Parent = MainFrame
+CustomScriptButton.BackgroundColor3 = Color3.fromRGB(211, 84, 0) -- Distinct Orange Color
+CustomScriptButton.Position = UDim2.new(0.076, 0, 0.68, 0)
+CustomScriptButton.Size = UDim2.new(0, 220, 0, 45)
+CustomScriptButton.Font = Enum.Font.SourceSansBold
+CustomScriptButton.Text = "Load XHubMax ☄️"
+CustomScriptButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+CustomScriptButton.TextSize = 13
+
+CustomScriptCorner.CornerRadius = UDim.new(0, 8)
+CustomScriptCorner.Parent = CustomScriptButton
+
+---------------------------------------------------------------------
+-- LOGIC & FUNCTIONS
+---------------------------------------------------------------------
+
+local PriorityCrops = {
+    "dragon", "mango", "coconut", "grape", "banana", "pineapple",
+    "cactus", "corn", "bamboo", "apple", "tomato", "tulip", "blue",
+    "straw", "carrot", "cherry", "acorn", "mush", "fruit", "harvest"
+}
+
+local homeCFrame = nil
+local autoStealing = false
+local harvesting = false
+local stealStep = 1
+
+local function getWorkspacePrompts()
+    local prompts = {}
+    for _, v in ipairs(workspace:GetDescendants()) do
+        if v:IsA("ProximityPrompt") then
+            table.insert(prompts, v)
+        end
+    end
+    return prompts
+end
+
+local function findBestPrompt(myPosition)
+    local allPrompts = getWorkspacePrompts()
+    
+    for _, cropName in ipairs(PriorityCrops) do
+        for _, prompt in ipairs(allPrompts) do
+            local parentName = prompt.Parent and string.lower(prompt.Parent.Name) or ""
+            local promptText = string.lower(prompt.ObjectText .. prompt.ActionText .. prompt.Name)
+            
+            if string.find(promptText, "harvest") or string.find(parentName, "harvest") then
+                if string.find(promptText, cropName) or string.find(parentName, cropName) then
+                    local targetPart = prompt.Parent
+                    if targetPart and targetPart:IsA("BasePart") then
+                        if (targetPart.Position - myPosition).Magnitude > 50 then
+                            return prompt, targetPart
+                        end
+                    end
+                end
+            end
+        end
+    end
+    return nil, nil
+end
+
+-- [Button 1]: Auto Steal Logic
+StealButton.MouseButton1Click:Connect(function()
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local rootPart = character:FindFirstChild("HumanoidRootPart")
+    
+    if not rootPart then return end
+    
+    if stealStep == 1 then
+        homeCFrame = rootPart.CFrame
+        StealButton.Text = "Activate Auto Steal 🚀"
+        StealButton.BackgroundColor3 = Color3.fromRGB(30, 144, 255)
+        stealStep = 2
+        
+    elseif stealStep == 2 then
+        autoStealing = not autoStealing
+        if autoStealing then
+            StealButton.Text = "Stealing Underway... ON 🔥"
+            StealButton.BackgroundColor3 = Color3.fromRGB(50, 205, 50)
+            
+            task.spawn(function()
+                while autoStealing do
+                    if not homeCFrame then break end
+                    
+                    local prompt, targetPart = findBestPrompt(homeCFrame.Position)
+                    
+                    if prompt and targetPart then
+                        rootPart.CFrame = targetPart.CFrame + Vector3.new(0, 2, 0)
+                        task.wait(0.04) 
+                        
+                        prompt.RequiresLineOfSight = false
+                        prompt.MaxActivationDistance = 999
+                        fireproximityprompt(prompt)
+                        
+                        task.wait(0.02)
+                        rootPart.CFrame = homeCFrame
+                        task.wait(0.8) 
+                    else
+                        task.wait(1.5) 
+                    end
+                end
+            end)
+        else
+            StealButton.Text = "Activate Auto Steal 🚀"
+            StealButton.BackgroundColor3 = Color3.fromRGB(30, 144, 255)
+        end
+    end
+end)
+
+-- [Button 2]: Remote Harvest Logic
+HarvestButton.MouseButton1Click:Connect(function()
+    harvesting = not harvesting
+    if harvesting then
+        HarvestButton.Text = "Remote Harvesting... ON 🌾"
+        HarvestButton.BackgroundColor3 = Color3.fromRGB(50, 205, 50)
+        
+        task.spawn(function()
+            while harvesting do
+                local player = game.Players.LocalPlayer
+                local character = player.Character or player.CharacterAdded:Wait()
+                local rootPart = character:FindFirstChild("HumanoidRootPart")
+                
+                if rootPart then
+                    local originalPosition = rootPart.CFrame
+                    
+                    for _, v in ipairs(workspace:GetDescendants()) do
+                        if not harvesting then break end
+                        
+                        local isHarvest = string.find(string.lower(v.Name), "harvest") 
+                                          or (v:IsA("ProximityPrompt") and string.find(string.lower(v.ObjectText), "harvest"))
+                                          or (v:IsA("ProximityPrompt") and string.find(string.lower(v.ActionText), "harvest"))
+                        
+                        if isHarvest then
+                            local targetPart = v.Parent
+                            if targetPart and targetPart:IsA("BasePart") then
+                                rootPart.CFrame = targetPart.CFrame + Vector3.new(0, 2, 0)
+                                task.wait(0.05)
+                                
+                                if v:IsA("ProximityPrompt") then
+                                    v.RequiresLineOfSight = false
+                                    v.MaxActivationDistance = 999999
+                                    fireproximityprompt(v)
+                                elseif v:IsA("ClickDetector") then
+                                    fireclickdetector(v)
+                                elseif v:IsA("TouchTransmitter") then
+                                    firetouchinterest(rootPart, targetPart, 0)
+                                    task.wait()
+                                    firetouchinterest(rootPart, targetPart, 1)
+                                end
+                                task.wait(0.05)
+                            end
+                        end
+                    end
+                    rootPart.CFrame = originalPosition
+                end
+                task.wait(1.5) 
+            end
+        end)
+    else
+        HarvestButton.Text = "Remote Harvest: OFF 🌾"
+        HarvestButton.BackgroundColor3 = Color3.fromRGB(138, 43, 226)
+    end
+end)
+
+-- [Button 3]: XHubMax Loader Logic
+CustomScriptButton.MouseButton1Click:Connect(function()
+    CustomScriptButton.Text = "Loading Script... ⏳"
+    CustomScriptButton.BackgroundColor3 = Color3.fromRGB(127, 140, 141) -- Grey during loading
+    
+    local success, err = pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Xhubmax/Gag2/refs/heads/main/Xwoalua"))()
+    end)
+    
+    if success then
+        CustomScriptButton.Text = "Loaded Successfully! ✅"
+        CustomScriptButton.BackgroundColor3 = Color3.fromRGB(46, 204, 113) -- Green on success
+    else
+        CustomScriptButton.Text = "Failed to Load ❌"
+        CustomScriptButton.BackgroundColor3 = Color3.fromRGB(192, 41, 43) -- Red on error
+        warn("Error loading XHubMax: " .. tostring(err))
+    end
+    
+    -- Reset button look after 3 seconds
+    task.delay(3, function()
+        CustomScriptButton.Text = "Load XHubMax ☄️"
+        CustomScriptButton.BackgroundColor3 = Color3.fromRGB(211, 84, 0)
+    end)
+end)
